@@ -230,7 +230,38 @@ y lo podemos usar en la funcion del login:
 
 ```
 
-## Manejo de JWT
+#### import { map } from "rxjs";
+
+El map sirve para mutar y devolver un nuevo observable
+
+```
+  login(email: string, password: string) {
+    const url = `${this.baseUrl}/auth`;
+    const body = { email, password };
+
+    return this.http.post<AuthResponse>(url, body)
+      .pipe(
+        tap(resp => {
+          if (resp.ok) {
+            this._usuario = {
+              name: resp.name!,
+              uid: resp.uid!,
+              email
+            }
+          }
+        }),
+        map(resp => resp.ok),
+        catchError(err => of(false))
+      );
+  }
+```
+
+Con el `tap` podemos realizamos efectos secundarios pero no modifican la respuesta.
+En la funcion podemos observar que devuelve solo el `ok` del objeto y cuando se suscriban ya no devuelve toda la data como antes.
+Cuando de error el `catchError` se activa y podemos enviar un `false` pero lo tenemos que transformar en un Observable con el `of`.
+Con esta cadena de operadores `rxjs` nos aseguramos de obtener la informacion necesaria y devolver solo lo necesario.
+
+## Manejo de JWT (Almacenar info del usuario)
 
 ## Lazyload y rutas
 
