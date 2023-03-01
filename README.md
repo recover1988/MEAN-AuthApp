@@ -145,6 +145,91 @@ El button deberia tener las siguientes propiedades `type="submit"` y `[disabled]
 
 ## Conectar Angular con nuestro backend
 
+Importar el `HttpClientModule` de `"@angular/common/http"` en el app.module.ts
+
+```
+// app/app.module.ts
+
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from "@angular/common/http";
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+
+Crearse un servicio e inyectar el HttpClient para poder hacer las peticiones http
+
+```
+// app/auth/services/auth.service.ts
+
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+
+  constructor(
+    private http: HttpClient
+  ) { }
+}
+```
+
+En el service crearce una funcion que retorna un `Observable` del tipo de la respuesta que esperamos.
+
+```
+  private baseUrl = environment.baseUrl;
+
+  login(email: string, password: string) {
+    const url = `${this.baseUrl}/auth`;
+    const body = { email, password };
+
+    return this.http.post<AuthResponse>(url, body);
+  }
+
+```
+
+Para usarlo en el login hay que inyectar el servicio que creamos:
+
+```
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private authService: AuthService  <--
+  ) { }
+}
+```
+
+y lo podemos usar en la funcion del login:
+
+```
+  login() {
+    const { email, password } = this.miFormulario.value;
+    this.authService.login(email, password)
+      .subscribe(resp => {
+        console.log(resp)
+      })
+    // this.router.navigateByUrl('/dashboard')
+  }
+
+```
+
 ## Manejo de JWT
 
 ## Lazyload y rutas
