@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -17,8 +18,11 @@ export class LoginComponent {
   login() {
 
     console.log(this.miFormulario.value);
-    console.log(this.miFormulario.valid);
+    this.router.navigateByUrl('/dashboard')
   }
 
-  constructor(private fb: FormBuilder) { }
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+  ) { }
 }
