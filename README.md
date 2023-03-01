@@ -2,6 +2,147 @@
 
 Este es un breve listado de los temas fundamentales:
 
+## Rutas y lazyload
+
+Rutas desde el `componente`
+
+```
+// app/auth/auth-routing.module.ts
+
+const routes: Routes = [
+  {
+    path: '',
+    component: MainComponent,
+    children: [
+      { path: 'login', component: LoginComponent },
+      { path: 'registro', component: RegisterComponent },
+      { path: '**', redirectTo: 'login' },
+    ]
+  }
+];
+```
+
+Rutas cargadas al `root`
+
+```
+// app/app-routing.modules.ts
+
+const routes: Routes = [
+  {
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
+  },
+  {
+    path: 'dashboard',
+    loadChildren: () => import('./protected/protected.module').then(m => m.ProtectedModule)
+  },
+  {
+    path: '**',
+    redirectTo: 'auth'
+  }
+];
+```
+
+## Formulario Reactivos
+
+Importar el ReactiveFormModule.
+
+```
+// auth/auth.module.ts
+
+@NgModule({
+  declarations: [
+    LoginComponent,
+    RegisterComponent,
+    MainComponent
+  ],
+  imports: [
+    CommonModule,
+    AuthRoutingModule,
+    ReactiveFormsModule
+  ]
+})
+export class AuthModule { }
+```
+
+Crearse el formulario del lado del componente.
+
+```
+// pages/login/login.component.ts
+
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styles: [
+  ]
+})
+export class LoginComponent {
+
+  miFormulario: FormGroup = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+  })
+
+
+
+  constructor(private fb: FormBuilder) { }
+}
+
+```
+
+Pare ello inyectamos el `FormBuilder`, luego creamos el controlador del formulario que es de tipo 'FormGroup' con `this.fb.group`, donde definimos los campos del formulario como el email, password.
+Lo conectamos con el form del lado del HTML.
+
+```
+// pages/login/login.component.html
+
+<form
+  class="login100-form"
+  autocomplete="off"
+  [formGroup]="miFormulario"
+  (ngSubmit)="login()"
+>
+  <span class="login100-form-title p-b-49"> Login </span>
+
+  <div class="wrap-input100 m-b-23">
+    <span class="label-input100">Email</span>
+    <input
+      class="input100"
+      type="email"
+      formControlName="email"
+      placeholder="Ingrese su email"
+    />
+    <span class="focus-input100"></span>
+  </div>
+    .........
+  </div>
+</form>
+
+```
+
+Se conecta con el `[formGroup]="miFormulario"` en el form y luego cada campo con un `formControlName="'email"`.
+Con el `(ngSubmit)="login()"` y el boton de `type:"submit"` ejecutamos el formulario.
+
+El button deberia tener las siguientes propiedades `type="submit"` y `[disabled]="miFormulario.invalid"`
+
+```
+  <div class="container-login100-form-btn">
+    <div class="wrap-login100-form-btn">
+      <div class="login100-form-bgbtn"></div>
+      <button
+        class="login100-form-btn"
+        type="submit"
+        [disabled]="miFormulario.invalid"
+      >
+        Login
+      </button>
+    </div>
+  </div>
+```
+
 ## Conectar Angular con nuestro backend
 
 ## Manejo de JWT
