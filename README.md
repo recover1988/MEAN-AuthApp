@@ -261,6 +261,26 @@ En la funcion podemos observar que devuelve solo el `ok` del objeto y cuando se 
 Cuando de error el `catchError` se activa y podemos enviar un `false` pero lo tenemos que transformar en un Observable con el `of`.
 Con esta cadena de operadores `rxjs` nos aseguramos de obtener la informacion necesaria y devolver solo lo necesario.
 
+## SweetAlert2
+
+Instalamos el npm de `https://sweetalert2.github.io/#download`
+
+```
+npm install sweetalert2
+```
+
+Y lo usamos para enviar dinamicamente el error desde el backend:
+
+```
+ Swal.fire({
+            title: 'Error!',
+            text: ok,
+            icon: 'error',
+            confirmButtonText: 'Intente de Nuevo',
+
+          })
+```
+
 ## Manejo de JWT (Almacenar info del usuario)
 
 ## Lazyload y rutas
