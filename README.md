@@ -369,7 +369,7 @@ export const validarTokenCanMatchFn: CanMatchFn = () => {
 
 ## Mantener el estado del usuario
 
-Podemos usar el guard para validar el token y guardar los datos en this._usuario, asi si esta verificado podemo permitir entrar al dashboard
+Podemos usar el guard para validar el token y guardar los datos en this.\_usuario, asi si esta verificado podemo permitir entrar al dashboard
 
 ```
  validarToken(): Observable<boolean> {
@@ -392,13 +392,17 @@ Podemos usar el guard para validar el token y guardar los datos en this._usuario
   }
 ```
 
-## Manejo de errores
+## Generar versión de producción de Angular
 
-## RXJS y Operadores
+## Desplegar nuestra app de Angular en nuestro backend de Node
 
-## SweetAlert
+## Desplegar el backend + frontend en Heroku
 
-La idea de esta sección es que conectemos nuestro trabajo realizado en la sección anterior con Angular.
+## Realizar actualizaciones por cambios en el Frontend o Backend
+
+## Re-desplegar a Heroku
+
+## Revisar logs en producción
 
 # Angular
 

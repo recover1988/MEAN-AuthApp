@@ -24,6 +24,9 @@
               "src/favicon.ico",
               "src/assets"
             ],
+            "allowedCommonJsDependencies": [
+              "sweetalert2"
+            ],
             "styles": [
               "src/styles.css"
             ],
