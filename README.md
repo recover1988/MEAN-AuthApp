@@ -392,6 +392,26 @@ Podemos usar el guard para validar el token y guardar los datos en this.\_usuari
   }
 ```
 
+## Hashear las rutas
+
+La opcion de hasheo permite que las rutas de angular sean compatibles con servidores viejos.
+
+```
+// app/app-routing.module.ts
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes, {
+    useHash: true
+  })
+  ],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+```
+
+La opcion es `useHash:true`
+
 ## Generar versión de producción de Angular
 
 ## Desplegar nuestra app de Angular en nuestro backend de Node
