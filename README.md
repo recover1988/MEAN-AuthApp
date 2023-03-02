@@ -283,6 +283,48 @@ Y lo usamos para enviar dinamicamente el error desde el backend:
 
 ## Manejo de JWT (Almacenar info del usuario)
 
+Necesitamos guardar el token en el localStorage o SessionStorage cuando el usuario se logee, para eso en el servicio:
+
+```
+// auth.service.ts
+
+  login(email: string, password: string) {
+    const url = `${this.baseUrl}/auth`;
+    const body = { email, password };
+
+    return this.http.post<AuthResponse>(url, body)
+      .pipe(
+        tap(resp => {
+          localStorage.setItem('token', resp.token!); <--
+          if (resp.ok) {
+            this._usuario = {
+              name: resp.name!,
+              uid: resp.uid!,
+              email
+            }
+          }
+        }),
+        map(resp => resp.ok),
+        catchError(err => of(err.error.msg))
+      );
+  }
+
+```
+
+Para revalidar el token tenemos que llamar en el servicio a una nueva funcion que envie el token que esta guardado en el LocalStorage o SessionStorage.
+
+```
+// auth.service.ts
+
+  validarToken() {
+    const url = `${this.baseUrl}/auth/renew`;
+    const headers = new HttpHeaders()
+      .set('x-token', localStorage.getItem('token') || '');
+
+    return this.http.get(url, { headers })
+  }
+```
+
 ## Lazyload y rutas
 
 ## Guards

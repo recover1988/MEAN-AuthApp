@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { AuthResponse, Usuario } from '../interfaces/interface';
@@ -26,6 +26,7 @@ export class AuthService {
     return this.http.post<AuthResponse>(url, body)
       .pipe(
         tap(resp => {
+          localStorage.setItem('token', resp.token!);
           if (resp.ok) {
             this._usuario = {
               name: resp.name!,
@@ -39,6 +40,14 @@ export class AuthService {
       );
   }
 
+
+  validarToken() {
+    const url = `${this.baseUrl}/auth/renew`;
+    const headers = new HttpHeaders()
+      .set('x-token', localStorage.getItem('token') || '');
+
+    return this.http.get(url, { headers })
+  }
 
   constructor(
     private http: HttpClient
