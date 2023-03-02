@@ -326,12 +326,71 @@ Para revalidar el token tenemos que llamar en el servicio a una nueva funcion qu
 ```
 
 ## Guards
+
 CanActivate y CanLoad estan deprecados para su uso en clases y ahora pide usar CanActivateFn y CanMatchFn que son funciones planas.
+
 ```
+import { CanActivateFn, CanMatchFn, Router } from "@angular/router";
+import { AuthService } from "../auth/services/auth.service";
+import { inject } from "@angular/core";
+import { tap } from 'rxjs/operators';
+
+export const validarTokenCanActivateFn: CanActivateFn = () => {
+
+  const router = inject(Router);
+  const authService = inject(AuthService)
+
+  return authService.validarToken()
+    .pipe(
+      tap(valid => {
+        if (!valid) {
+          router.navigateByUrl('./auth/login')
+        }
+      })
+    )
+}
+
+export const validarTokenCanMatchFn: CanMatchFn = () => {
+
+  const router = inject(Router);
+  const authService = inject(AuthService)
+
+  return authService.validarToken()
+    .pipe(
+      tap(valid => {
+        if (!valid) {
+          router.navigateByUrl('./auth/login')
+        }
+      })
+    )
+}
 
 ```
 
 ## Mantener el estado del usuario
+
+Podemos usar el guard para validar el token y guardar los datos en this._usuario, asi si esta verificado podemo permitir entrar al dashboard
+
+```
+ validarToken(): Observable<boolean> {
+    const url = `${this.baseUrl}/auth/renew`;
+    const headers = new HttpHeaders()
+      .set('x-token', localStorage.getItem('token') || '');
+
+    return this.http.get<AuthResponse>(url, { headers })
+      .pipe(
+        map(resp => {
+          localStorage.setItem('token', resp.token!);
+          this._usuario = {
+            name: resp.name!,
+            uid: resp.uid!,
+          }
+          return resp.ok
+        }),
+        catchError(err => of(false))
+      )
+  }
+```
 
 ## Manejo de errores
 
