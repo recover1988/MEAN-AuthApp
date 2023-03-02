@@ -35,7 +35,7 @@ export class AuthService {
           }
         }),
         map(resp => resp.ok),
-        catchError(err => of(false))
+        catchError(err => of(err.error.msg))
       );
   }
 
