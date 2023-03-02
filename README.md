@@ -325,9 +325,11 @@ Para revalidar el token tenemos que llamar en el servicio a una nueva funcion qu
   }
 ```
 
-## Lazyload y rutas
-
 ## Guards
+CanActivate y CanLoad estan deprecados para su uso en clases y ahora pide usar CanActivateFn y CanMatchFn que son funciones planas.
+```
+
+```
 
 ## Mantener el estado del usuario
 
